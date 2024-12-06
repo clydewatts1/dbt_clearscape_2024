@@ -4,32 +4,38 @@ models:
     
     config:
         materialized: 'full_apply'
-        schema: 'TARGET'
+        schema: 'TARGET_VIEW'
+        alias: 'full_apply_02_out'
         target_schema: 'TARGET'
         target_table: 'full_apply_database'
+        # temp database name
+        temp_schema: 'TARGET'
+        # trans table
+        temp_trans_table: 'full_apply_02_trans'
+        # validation table
+        temp_val_table: 'full_apply_02_valid'
         # This is the key that will be used to join the data with the transformation key
-        trasformation_key:
-            - 'databasename'
+        transform_key:
+            - 'DatabaseName'
         tracking_end_ts_bound_type: 'inclusive'
         tracking_column_type: 'DATE'
         from_tracking_column: 'START_DATE'
         to_tracking_column: 'END_DATE'
+        tracking_high_date: 'date ''9999-12-31'''
+        tracking_low_date: 'date ''1900-01-01'''
         run_id_column: 'RUN_ID'
         job_id_column: 'JOB_ID'
         logical_delete_column: RECORD_DEL_IND
+        logical_delete_type: 'CHAR(1)'
+        logical_delete_yes: '''Y'''
+        logical_delete_no: '''N'''
+        
     # TThe constaints are used in creating the table and validated the 
     # data in the table
     columns:
       - name: databasename
         description: The name of the database
-        constraints:
-          - type: not_null
-        data_tests:
-          - unique
-          - not_null
       - name: ownername
         description: Owner Name
-        data_tests:
-          - not_null
         constraints:
           - type: not_null

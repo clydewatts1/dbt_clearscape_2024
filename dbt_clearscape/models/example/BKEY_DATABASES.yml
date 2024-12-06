@@ -1,0 +1,6 @@
+models:
+  - name: BKEY_DATABASES
+    description: DATABASES surrogate key table
+    config:
+        materialized: 'target_view_merge'
+        schema: 'TARGET'
