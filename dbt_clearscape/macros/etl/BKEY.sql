@@ -7,23 +7,21 @@
     {%- set existing_relation = load_cached_relation(this) -%}
 -- calling the macro set_query_band() which will set the query_band for this materialization as per the user_configuration
     {% do set_query_band() %}
-    {# setup temp trans relationship #}
-    {% set temp_trans_schema = config.get('temp_schema')%}
-    {% set temp_trans_schema = generate_schema_name(temp_trans_schema) %}
-    {% set temp_trans_database = config.get('temp_database') %}
-    {% set temp_trans_table = config.get('temp_trans_table',model.name~'_TRANS') %}
-    {% set temp_trans_table_relationship = api.Relation.create(schema=temp_trans_schema,database=temp_trans_database,identifier=temp_trans_table,type='table')%}
 
     {#---- Prehooks --------#}
 
     {{ run_hooks(pre_hooks, inside_transaction=False) }}
-
     {{ run_hooks(pre_hooks, inside_transaction=True) }}
-
+-- get relationships
+{% set surrogate_key_target_table_relationship = get_surrogate_key_target_table_relationsip() %}
+{% set temp_trans_table_relationship = get_surrogate_key_temp_trans_relationship() %}
+{% set last_id_table_relationship = get_surrogate_key_last_id_relationship() %}
 
 -- create a relation shio with the target schema, database and table
-{% set x = surrogate_key_create_target_table() %}
-{% set x = surrogate_key_create_target_view(target_relation)%}
+{% set x = surrogate_key_create_target_table(surrogate_key_target_table_relationship) %}
+
+{% set x = surrogate_key_create_target_view(target_relation,surrogate_key_target_table_relationship)%}
+{% set x = surrogate_key_create_last_table(target_relation,last_id_table_relationship) %}
 {% set x = surrogate_key_create_trans_table(temp_trans_table_relationship)%}
 {% set x = surrogate_key_populate_trans(temp_trans_table_relationship)%}
 
@@ -53,10 +51,21 @@
 {%- set columns = adapter.get_columns_in_relation(target_relation) -%}
 {% set job_id = config.get('job_id',model.name)%}
 {% set surrogate_key_id_column = config.get('surrogate_key_id_column','EDW_KEY')%}
+{% set surrogate_key_last_id_table = config.get('surrogate_key_last_id_table',false)%}
+{% if  surrogate_key_last_id_table %}
+        {% set last_id_value  %}
+            (SELECT COALESCE(MAX("{{surrogate_key_id_column}}"),0) FROM {{target_relation}})
+    {% endset %} 
+    {% else %}
+        {% set last_id_value  %}
+            (SELECT COALESCE(MAX("{{surrogate_key_id_column}}"),0) FROM {{target_relation}})
+    {% endset %}
+{% endif%}
+{#---- Main --------#}
 {% call statement('main',auto_begin=true) -%}
 
-LOCK TABLE {{target_relation}} FOR WRITE
-;INSERT INTO {{target_relation}}
+
+INSERT INTO {{target_relation}}
 (
 
     {% for column in columns -%}
@@ -65,7 +74,7 @@ LOCK TABLE {{target_relation}} FOR WRITE
 )
 SELECT
             ROW_NUMBER() OVER (ORDER BY {%- for row in surrogate_key_natural_column_list %} SRC."{{row}}"{%- if not loop.last %} , {% endif %}{% endfor%})  
-            + (SELECT COALESCE(MAX("{{surrogate_key_id_column}}"),0) FROM {{target_relation}})
+            + {{last_id_value}}
             
             AS {{ surrogate_key_id_column }}
             {%- for row in surrogate_key_natural_column_list %}
@@ -97,7 +106,12 @@ TGT.{{ row }} = SRC.{{ row }}{%- if not loop.last %} AND {% endif %}
 {%- endfor %}
 WHERE TGT.{{ surrogate_key_id_column }} IS NULL
 {%- endcall %}
+{%- set main_result = load_result('main') -%}
+{%- set insert_row_count = main_result['response']['rows_affected'] %}
 
+{% do log("main_result="~main_result)%}
+{% do log("rows_affected="~main_result['response']['rows_affected'])%}
+{% set x = surrogate_key_update_last_id(last_id_table_relationship,insert_row_count) %}
   {{ run_hooks(post_hooks, inside_transaction=True) }}
 
   -- `COMMIT` happens here
@@ -112,15 +126,25 @@ WHERE TGT.{{ surrogate_key_id_column }} IS NULL
 {{ return({'relations': [target_relation]}) }}
 {% endmaterialization -%}
 
-{#------------------------------------------------------------------------------------------------
--- Macro: surrogate_key_create_target_table
--- Description: This will create the surrogate key target table
--- The table is independent of the "sql" passed in
---------------------------------------------------------------------------------------------------
+{#--------------------------------------------------------------------------------------------
+-- Macro: get_surrogate_key_target_table_relationship
+-- Description: This will return the surrogate key target table relationship
+---------------------------------------------------------------------------------------------#}
+{% macro get_surrogate_key_target_table_relationsip()%}
+    {# Get schema , database and identify for surrogate key table #}
+    {% set surrogate_key_target_schema = config.get('surrogate_key_target_schema') %}
+    {% set surrogate_key_target_schema = generate_schema_name(surrogate_key_target_schema) %}
+    {% set surrogate_key_target_database = config.get('surrogate_key_target_database') %}
+    {% set surrogate_key_target_table = config.get('surrogate_key_target_table') %}
+    {% set surrogate_key_target_relationship = api.Relation.create(schema=surrogate_key_target_schema,database=surrogate_key_target_database,identifier=surrogate_key_target_table,type='table')%}
+    {{ return(surrogate_key_target_relationship) }}
+{% endmacro %}
 
-#}
-{% macro surrogate_key_create_target_table() -%}
-    {% do log(sql)%}
+{#--------------------------------------------------------------------------------------------
+-- Macro: get_surrogate_key_target_table_relationship
+-- Description: This will return the surrogate key target table relationship
+---------------------------------------------------------------------------------------------#}
+{% macro get_surrogate_key_out_view_relationsip()%}
     {# Get schema , database and identify for surrogate key table #}
     {% set surrogate_key_target_schema = config.get('surrogate_key_target_schema') %}
     {# convert to full schema #}
@@ -128,6 +152,48 @@ WHERE TGT.{{ surrogate_key_id_column }} IS NULL
     {% set surrogate_key_target_database = config.get('surrogate_key_target_database') %}
     {% set surrogate_key_target_table = config.get('surrogate_key_target_table') %}
     {% set surrogate_key_target_relationship = api.Relation.create(schema=surrogate_key_target_schema,database=surrogate_key_target_database,identifier=surrogate_key_target_table,type='table')%}
+    {{ return(surrogate_key_target_relationship) }}
+{% endmacro %}
+{#--------------------------------------------------------------------------------------------
+-- Macro: get_surrogate_key_temp_trans_relationship
+-- Description: This will return the surrogate key target table relationship
+---------------------------------------------------------------------------------------------#}
+{% macro get_surrogate_key_temp_trans_relationship()%}
+    {# Get schema , database and identify for surrogate key table #}
+    {% set temp_trans_schema = config.get('temp_schema')%}
+    {% set temp_trans_schema = generate_schema_name(temp_trans_schema) %}
+    {% set temp_trans_database = config.get('temp_database') %}
+    {% set temp_trans_table = config.get('temp_trans_table',model.name~'_TRANS') %}
+    {% set temp_trans_table_relationship = api.Relation.create(schema=temp_trans_schema,database=temp_trans_database,identifier=temp_trans_table,type='table')%}
+    {{ return(temp_trans_table_relationship) }}
+{% endmacro %}
+
+{#-------------------------------------------------------------------------------------------
+-- Macro: get_surrogate_key_last_id_relationship
+-- Description: This will return the surrogate key target table relationship
+---------------------------------------------------------------------------------------------#}
+{% macro get_surrogate_key_last_id_relationship()%}
+   {# Get schema , database and identify for surrogate key table #}
+    {% set surrogate_key_target_schema = config.get('surrogate_key_target_schema') %}
+    {# convert to full schema #}
+    {% set surrogate_key_target_schema = generate_schema_name(surrogate_key_target_schema) %}
+    {% set surrogate_key_target_database = config.get('surrogate_key_target_database') %}
+    {% set surrogate_key_target_table = config.get('surrogate_key_target_table') %}
+    {% set surrogate_key_last_id_table = config.get('surrogate_key_last_id_table') %}
+    {% if surrogate_key_last_id_table is none or surrogate_key_last_id_table is not defined %}
+        {% set surrogate_key_last_id_table = surrogate_key_target_table~'_LAST_ID'  %}
+    {% endif %}
+    {% set surrogate_key_last_id_relationship = api.Relation.create(schema=surrogate_key_target_schema,database=surrogate_key_target_database,identifier=surrogate_key_last_id_table,type='table')%}
+    {{ return(surrogate_key_last_id_relationship) }}
+{% endmacro %}
+{#------------------------------------------------------------------------------------------------
+-- Macro: surrogate_key_create_target_table
+-- Description: This will create the surrogate key target table
+-- The table is independent of the "sql" passed in
+--------------------------------------------------------------------------------------------------
+
+#}
+{% macro surrogate_key_create_target_table(surrogate_key_target_relationship) -%}
     {# Check if table exists , ignore the rest if table exists#}
     {% do log("surrogate_key_target_relationship="~surrogate_key_target_relationship)%}
     {%- set surrogate_key_target_relationship_db = adapter.get_relation(database=surrogate_key_target_relationship.database
@@ -213,8 +279,148 @@ WHERE TGT.{{ surrogate_key_id_column }} IS NULL
     {{ return(target_relation) }}
 {% endmacro -%}
 
+{#------------------------------------------------------------------------------------------------
+-- Macro: surrogate_key_create_target_table
+-- Description: This will create the surrogate key target table
+-- The table is independent of the "sql" passed in
+--------------------------------------------------------------------------------------------------
 
- 
+#}
+{% macro surrogate_key_create_last_table(surrogate_key_target_relationship,surrogate_key_last_id_relationship) -%}
+     {% do log("surrogate_key_last_id_relationship="~surrogate_key_last_id_relationship)%}
+    {%- set surrogate_key_last_id_relationship_db = adapter.get_relation(database=surrogate_key_last_id_relationship.database
+            ,schema=surrogate_key_last_id_relationship.schema
+            ,identifier=surrogate_key_last_id_relationship.identifier) -%} 
+    {% if surrogate_key_last_id_relationship_db is not none %}
+        {% do log("SURROGATE KEY last table exists : ")%}
+    {% else %}
+        {# Now start building table#}
+        {% do log("BEGIN TO CREATE SURROGATE KEY TABLE :  "~surrogate_key_last_id_relationship)%}
+        {# Set up variables from config #}
+        {# TOOO : change required #}
+        {% set from_tracking_column = config.get('from_tracking_column')%}
+        {% set to_tracking_column = config.get('to_tracking_column')%}
+        {% set tracking_column_type = config.get('tracking_column_type')%}
+        {% set logical_delete_column = config.get('logical_delete_column')%}
+        {% set logical_delete_type = config.get('logical_delete_type')%}
+        {% set job_id_column = config.get('job_id_column')%}
+        {% set run_id_column = config.get('run_id_column')%}
+        {% set job_id_column_type = config.get('job_id_column_type','VARCHAR(128)')%}
+        {% set run_id_column_type = config.get('job_id_column_type','VARCHAR(128)')%}
+        {% set update_prefix = config.get('update_prefix','_UPDATE')%}
+        {% set job_id_update_column = job_id_column~update_prefix%}
+        {% set run_id_update_column = run_id_column~update_prefix%}
+        {% set surrogate_key_id_column = config.get('surrogate_key_id_column','EDW_KEY')%}
+        {% set surrogage_key_id_type   = config.get('surrogage_key_id_type','BIGINT')%}
+        {% set surrogate_key_natural_column_list = config.get('surrogate_key_natural_column_list',['NATURAL_KEY'])%}
+        {% set surrogate_key_table_seperator = config.get('surrogate_key_table_seperator','_')%}
+        {% set surrogate_key_natural_column_type = config.get('surrogate_key_natural_column_type','VARCHAR(255)')%}
+        {% set surrogate_key_domain_column = config.get('surrogate_key_domain_column','DOMAIN_ID')%}
+        {% set surrogate_key_domain_type = config.get('surrogate_key_domain_type','SMALLINT') %}
+        {% set surrogate_key_domain_type = config.get('surrogate_key_domain_type')%}
+        {% set job_id = config.get('job_id',model.name)%}
+        {# Now start building the create table string #}
+        {% set index = config.get('index','UNIQUE PRIMARY INDEX("'~surrogate_key_id_column~'")')%}
+        {% set surrogate_key_domain_column = config.get('surrogate_key_domain_column','DOMAIN_ID') %}
+        {% set surrogate_key_domain_type = config.get('surrogate_key_domain_type','SMALLINT') %}
+        {% set surrogate_key_domain_id = config.get('surrogate_key_domain_id','01') %}
+
+        {% set surrogate_key_set_column = config.get('surrogate_key_set_column','KEY_SET_ID')%}
+        {% set surrogate_key_set_type = config.get('surrogate_key_set_type','SMALLINT')%}
+        {% set surrogate_key_set_id = config.get('surrogate_key_set_id','01')%}
+        {% set logical_delete_no = config.get('logical_delete_no')%}
+        {% set tracking_high_date = config.get('tracking_high_date')%}
+        {# Now start building the create table string #}
+
+        {% set sql_create_table%}
+        CREATE TABLE {{surrogate_key_last_id_relationship}}
+        (
+            {{ surrogate_key_id_column }} {{ surrogage_key_id_type }} NOT NULL
+            {%- if surrogate_key_set_column is defined %}
+           ,{{ surrogate_key_set_column }} {{ surrogate_key_set_type }} NOT NULL COMPRESS({{ surrogate_key_set_id }})
+            {%- endif %}
+           ,{{ from_tracking_column }} {{ tracking_column_type }} NOT NULL
+           ,{{ to_tracking_column }} {{ tracking_column_type }} NOT NULL
+           ,{{ logical_delete_column }} {{ logical_delete_type }} NOT NULL
+           {%- if job_id_column is defined %}
+           ,{{ job_id_column }} {{ job_id_column_type }} NOT NULL COMPRESS('')
+           ,{{ job_id_update_column }} {{ job_id_column_type }}  COMPRESS(NULL)
+           {%- endif %}
+           {%- if run_id_column is defined %}
+           ,{{ run_id_column }} {{ run_id_column_type }} NOT NULL
+           ,{{ run_id_update_column }} {{ run_id_column_type }} COMPRESS(NULL)
+           {%- endif %}
+        ) NO PRIMARY INDEX
+     {% endset %}
+
+        {% set sql_insert_table%}
+        INSERT INTO {{surrogate_key_last_id_relationship}}
+        (
+            {{ surrogate_key_id_column }}
+            {%- if surrogate_key_set_column is defined %}
+           ,{{ surrogate_key_set_column }} 
+            {%- endif %}
+           ,{{ from_tracking_column }}
+           ,{{ to_tracking_column }}
+           ,{{ logical_delete_column }}
+           {%- if job_id_column is defined %}
+           ,{{ job_id_column }} 
+           ,{{ job_id_update_column }} 
+           {%- endif %}
+           {%- if run_id_column is defined %}
+           ,{{ run_id_column }} 
+           ,{{ run_id_update_column }} 
+           {%- endif %}
+        ) VALUES 
+        (
+            (SELECT COALESCE(MAX("{{surrogate_key_id_column}}"),0) FROM {{surrogate_key_target_relationship}})
+            {%- if surrogate_key_set_column is defined %}
+           ,{{ surrogate_key_set_id }} 
+            {%- endif %}
+           ,CURRENT_DATE
+           ,{{tracking_high_date}}
+           ,{{logical_delete_no}}
+           {%- if job_id_column is defined %}
+           ,'{{job_id}}'
+           ,NULL
+           {%- endif %}
+           {%- if run_id_column is defined %}
+           ,'{{invocation_id}}'
+           ,NULL
+           {%- endif %}
+        )
+     {% endset %}
+
+
+        {# Log the create table string #}
+        {% do log("sql_insert_table"~sql_insert_table)%}
+        {# Execute the create table string #}
+        {% set results = run_query(sql_create_table) %}
+        {# Log results #}
+        {% do log("results"~results)%}
+        {# Log the create table string #}
+        {% do log("END CREATE SURROGATE KEY LAST ID TABLE :  "~surrogate_key_target_relationship)%}
+        {# Log the create table string #}
+        {% do log("sql_insert_table"~sql_insert_table)%}
+        {% do log("INITIALISE SURROGATE KEY LAST ID TABLE ")%}
+        {# Execute the create table string #}
+        {% set results = run_query(sql_insert_table) %}
+        {# Log results #}
+        {% do log("results"~results)%}
+
+        {# Log the create table string #}
+        {% do log("END CREATE SURROGATE KEY TABLE :  "~surrogate_key_target_relationship)%}
+    
+        ----- =============================================== ---
+    {% endif %}
+
+    {{ return(target_relation) }}
+{% endmacro -%}
+
+
+
+
+
 {#------------------------------------------------------------------------------------------------
 -- Macro: surrogate_key_create_target_view
 -- Description: This will create the surrogate key view table
@@ -222,31 +428,25 @@ WHERE TGT.{{ surrogate_key_id_column }} IS NULL
 --------------------------------------------------------------------------------------------------
 
 #}
-{% macro surrogate_key_create_target_view(target_relation) -%}
-    {% do log("Create surroge key view :"~target_relation) %}
+{% macro surrogate_key_create_target_view(out_view_relation,surrogate_key_table_relation) -%}
+    {% do log("Create surroge key view :"~out_view_relation) %}
     {% do log(sql)%}
     {# Get schema , database and identify for surrogate key table #}
     {% set surrogate_key_target_schema = config.get('surrogate_key_target_schema') %}
-    {# convert to full schema #}
-    {% set surrogate_key_target_schema = generate_schema_name(surrogate_key_target_schema) %}
-    {% set surrogate_key_target_database = config.get('surrogate_key_target_database') %}
-    {% set surrogate_key_target_table = config.get('surrogate_key_target_table') %}
-    {% set surrogate_key_target_relationship = api.Relation.create(schema=surrogate_key_target_schema,database=surrogate_key_target_database,identifier=surrogate_key_target_table,type='table')%}
-    {# Check if table exists , ignore the rest if table exists#}
     {% do log("surrogate_key_target_relationship="~surrogate_key_target_relationship)%}
-  {%- set surrogate_key_view_relationship_db = adapter.get_relation(database=target_relation.database
-            ,schema=target_relation.schema
-            ,identifier=target_relation.identifier) -%} 
+   {%- set surrogate_key_view_relationship_db = adapter.get_relation(database=out_view_relation.database
+            ,schema=out_view_relation.schema
+            ,identifier=out_view_relation.identifier) -%} 
     {% if surrogate_key_view_relationship_db is not none %}
         {% do log("SURROGATE KEY target view exists : "~surrogate_key_view_relationship_db)%}
     {% else %}
         {# Now start building table #}
-        {% do log("BEGIN TO CREATE SURROGATE KEY VIEW :  "~surrogate_key_target_relationship)%}
+        {% do log("BEGIN TO CREATE SURROGATE KEY VIEW :  "~out_view_relation)%}
         {# Get columns from target surrogate_key_target_relationship #}
-        {%- set view_columns = adapter.get_columns_in_relation(surrogate_key_target_relationship) -%}
+        {%- set view_columns = adapter.get_columns_in_relation(surrogate_key_table_relation) -%}
 
         {% set sql_view_table%}
-        REPLACE vIEW {{target_relation}} AS 
+        REPLACE VIEW {{out_view_relation}} AS 
             SELECT
             {%- for row in view_columns %}
             {{ row.name }} 
@@ -254,7 +454,7 @@ WHERE TGT.{{ surrogate_key_id_column }} IS NULL
             , 
             {%- endif %}
             {%- endfor %}
-            FROM {{surrogate_key_target_relationship}}
+            FROM {{surrogate_key_table_relation}}
         
     {% endset %}
         {# Log the create table string #}
@@ -268,7 +468,7 @@ WHERE TGT.{{ surrogate_key_id_column }} IS NULL
         ----- =============================================== ---
     {% endif %}
 
-    {{ return(target_relation) }}
+    {{ return(out_view_relation) }}
 {% endmacro -%}
 
 
@@ -380,3 +580,41 @@ WHERE TGT.{{ surrogate_key_id_column }} IS NULL
 
 {% endmacro -%}
  
+ {#------------------------------------------------------------------------------------------------------------------------------------------------
+ -- Macro:surrogate_key_update_last_id
+ --
+ --
+ --------------------------------------------------------------------------------------------------------------------------------------------------#}
+{% macro surrogate_key_update_last_id(last_id_relationship,row_count) %}
+
+{% if row_count == 0 %}
+    {% do log("ROW_COUNT is zero - no rows update:"~row_count)%}
+{% else %}
+    {% do log("ROW_COUNT is not zero - rows updated:"~row_count)%}
+    {% set surrogate_key_id_column = config.get('surrogate_key_id_column','EDW_KEY')%}
+    {% set surrogate_key_set_id = config.get('surrogate_key_set_id')%}
+    {% set surrogate_key_set_column = config.get('surrogate_key_set_column','KEY_SET_ID')%}
+    {% set job_id_column = config.get('job_id_column')%}
+    {% set run_id_column = config.get('run_id_column')%}
+    {% set update_prefix = config.get('update_prefix','_UPDATE')%}
+    {% set job_id_update_column = job_id_column~update_prefix%}
+    {% set run_id_update_column = run_id_column~update_prefix%}
+    {% set job_id = config.get('job_id',model.name)%}
+    {% set update_sql%}
+        UPDATE {{last_id_relationship}} SET 
+            {{surrogate_key_id_column}} = {{surrogate_key_id_column}} + {{row_count}}
+        {%- if job_id_column is defined %}
+            ,{{job_id_column}} = '{{job_id}}'
+        {%- endif %}
+        {%- if run_id_column is defined %}
+            ,{{run_id_column}} = '{{invocation_id}}'
+        {%- endif %}
+        WHERE "{{surrogate_key_set_column}}" = {{surrogate_key_set_id}}
+{% endset %}
+    {% do log("update_sql"~update_sql)%}
+    {# set results = run_query(update_sql) #}
+    {# do log("results"~results)#}
+{% endif %}
+
+{{ return(update_sql) }}
+{% endmacro %}
