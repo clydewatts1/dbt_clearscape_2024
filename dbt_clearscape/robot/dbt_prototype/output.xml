@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.1.1 (Python 3.12.8 on win32)" generated="2024-12-18T21:05:09.065652" rpa="false" schemaversion="5">
+<suite id="s1" name="Dbt Test1" source="C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt_clearscape\robot\dbt_prototype\dbt_test1.robot">
+<test id="s1-t1" name="Test DBT Version" line="34">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:09.132513" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T21:05:09.132513" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T21:05:09.222828" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T21:05:09.131518" elapsed="3.603677"/>
+</kw>
+<status status="PASS" start="2024-12-18T21:05:09.130530" elapsed="3.604665"/>
+</kw>
+<kw name="dbt_core.DBT Version Test">
+<msg time="2024-12-18T21:05:12.740281" level="FAIL">No keyword with name 'dbt_core.DBT Version Test' found.</msg>
+<arg>1.9.0</arg>
+<status status="FAIL" start="2024-12-18T21:05:12.740281" elapsed="0.000000">No keyword with name 'dbt_core.DBT Version Test' found.</status>
+</kw>
+<doc>Tests if the DBT version is correct</doc>
+<status status="FAIL" start="2024-12-18T21:05:09.130530" elapsed="3.610366">No keyword with name 'dbt_core.DBT Version Test' found.</status>
+</test>
+<test id="s1-t2" name="Test Teradata Connection" line="38">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:12.743836" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T21:05:12.744375" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T21:05:12.744375" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T21:05:13.277253" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T21:05:12.743299" elapsed="0.536041"/>
+</kw>
+<status status="PASS" start="2024-12-18T21:05:12.743299" elapsed="0.536041"/>
+</kw>
+<kw name="Connect To My Teradata DB">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:13.282037" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T21:05:13.282619" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T21:05:13.282619" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T21:05:13.868785" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T21:05:13.280506" elapsed="0.590436"/>
+</kw>
+<status status="PASS" start="2024-12-18T21:05:13.279862" elapsed="0.591738"/>
+</kw>
+<kw name="Get DBT Info">
+<kw name="Query" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:13.872679" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;select * from dbc.dbcinfo&lt;/code&gt;</msg>
+<msg time="2024-12-18T21:05:13.933756" level="INFO" html="true">&lt;div style="max-width: 100%; overflow-x: auto;"&gt;&lt;table style="width: auto; border-collapse: collapse; border: 2px solid rgb(140 140 140)"&gt;&lt;caption style="text-align: left; font-weight: bold; padding: 5px;"&gt;Query returned 3 rows&lt;/caption&gt;&lt;tr&gt;&lt;th scope="col" style="background-color: #d6ecd4; border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;Row&lt;/th&gt;&lt;th scope="col" style="background-color: #505050; color: #fff;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;InfoKey&lt;/th&gt;&lt;th scope="col" style="background-color: #505050; color: #fff;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;InfoData&lt;/th&gt;&lt;/tr&gt;&lt;tr style="background-color: #eee;"&gt;&lt;th scope="row" style="background-color: #d6ecd4;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;0&lt;/th&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;VERSION&lt;/td&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;17.20.03.26&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope="row" style="background-color: #d6ecd4;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;1&lt;/th&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;LANGUAGE SUPPORT MODE&lt;/td&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;Standard&lt;/td&gt;&lt;/tr&gt;&lt;tr style="background-color: #eee;"&gt;&lt;th scope="row" style="background-color: #d6ecd4;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;2&lt;/th&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;RELEASE&lt;/td&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;17.20.03.26&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</msg>
+<msg time="2024-12-18T21:05:13.996329" level="INFO">${Rows} = [['VERSION', '17.20.03.26'], ['LANGUAGE SUPPORT MODE', 'Standard'], ['RELEASE', '17.20.03.26']]</msg>
+<var>${Rows}</var>
+<arg>select * from dbc.dbcinfo</arg>
+<doc>Runs a query with the ``select_statement`` and returns the result as list of rows.
+The type of row values depends on the database module -
+usually they are tuples or tuple-like objects.</doc>
+<status status="PASS" start="2024-12-18T21:05:13.872679" elapsed="0.123650"/>
+</kw>
+<doc>This will get the DBT info</doc>
+<status status="PASS" start="2024-12-18T21:05:13.872119" elapsed="0.124803"/>
+</kw>
+<doc>Tests if the Teradata connection is successful</doc>
+<status status="PASS" start="2024-12-18T21:05:12.742752" elapsed="1.254680"/>
+</test>
+<test id="s1-t3" name="Prepare Tables for Testing" line="43">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:14.001424" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T21:05:14.001934" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T21:05:14.002482" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T21:05:14.556467" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T21:05:14.001424" elapsed="0.556239"/>
+</kw>
+<status status="PASS" start="2024-12-18T21:05:14.000007" elapsed="0.557656"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:14.558174" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;DELETE FROM CS01_TARGET.BKEY_DATABASES&lt;/code&gt;</msg>
+<arg>DELETE FROM CS01_TARGET.BKEY_DATABASES</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2024-12-18T21:05:14.558174" elapsed="0.165503"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:14.725280" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;DELETE FROM CS01_TARGET.full_apply_database&lt;/code&gt;</msg>
+<arg>DELETE FROM CS01_TARGET.full_apply_database</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2024-12-18T21:05:14.724714" elapsed="0.137686"/>
+</kw>
+<doc>This will delete the target Tables</doc>
+<status status="PASS" start="2024-12-18T21:05:13.999442" elapsed="0.863463"/>
+</test>
+<test id="s1-t4" name="Run Model BKEY_01_03_01" line="49">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:14.863950" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T21:05:14.863950" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T21:05:14.863950" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T21:05:15.503695" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T21:05:14.863950" elapsed="0.641261"/>
+</kw>
+<status status="PASS" start="2024-12-18T21:05:14.863427" elapsed="0.641784"/>
+</kw>
+<kw name="DBT Run Test">
+<msg time="2024-12-18T21:05:15.508477" level="FAIL">No keyword with name 'DBT Run Test' found.</msg>
+<arg>BKEY_01_03_01</arg>
+<status status="FAIL" start="2024-12-18T21:05:15.508477" elapsed="0.000000">No keyword with name 'DBT Run Test' found.</status>
+</kw>
+<doc>This will test the running of the surrogate key model</doc>
+<status status="FAIL" start="2024-12-18T21:05:14.863427" elapsed="0.645730">No keyword with name 'DBT Run Test' found.</status>
+</test>
+<test id="s1-t5" name="Run Model Full Apply 01" line="53">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:15.529016" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T21:05:15.536246" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T21:05:15.536246" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T21:05:16.128593" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T21:05:15.529016" elapsed="0.601591"/>
+</kw>
+<status status="PASS" start="2024-12-18T21:05:15.529016" elapsed="0.601591"/>
+</kw>
+<kw name="DBT Run Test">
+<msg time="2024-12-18T21:05:16.133123" level="FAIL">No keyword with name 'DBT Run Test' found.</msg>
+<arg>Full_Apply_01</arg>
+<status status="FAIL" start="2024-12-18T21:05:16.133123" elapsed="0.000000">No keyword with name 'DBT Run Test' found.</status>
+</kw>
+<doc>This will test the running of the full apply model No 1</doc>
+<status status="FAIL" start="2024-12-18T21:05:15.528393" elapsed="0.605259">No keyword with name 'DBT Run Test' found.</status>
+</test>
+<test id="s1-t6" name="Run Model Full Apply 02" line="57">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:16.136503" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T21:05:16.137011" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T21:05:16.137011" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T21:05:16.711235" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T21:05:16.136422" elapsed="0.576918"/>
+</kw>
+<status status="PASS" start="2024-12-18T21:05:16.135913" elapsed="0.577427"/>
+</kw>
+<kw name="DBT Run Test">
+<msg time="2024-12-18T21:05:16.716602" level="FAIL">No keyword with name 'DBT Run Test' found.</msg>
+<arg>Full_Apply_02</arg>
+<status status="FAIL" start="2024-12-18T21:05:16.716064" elapsed="0.000538">No keyword with name 'DBT Run Test' found.</status>
+</kw>
+<doc>This will test the running of the full apply model No 2</doc>
+<status status="FAIL" start="2024-12-18T21:05:16.134819" elapsed="0.582322">No keyword with name 'DBT Run Test' found.</status>
+</test>
+<test id="s1-t7" name="Run Model Target Table Databases" line="61">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:16.723868" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T21:05:16.723868" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T21:05:16.724868" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T21:05:17.349228" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T21:05:16.722867" elapsed="0.627650"/>
+</kw>
+<status status="PASS" start="2024-12-18T21:05:16.722867" elapsed="0.628610"/>
+</kw>
+<kw name="DBT Run Test">
+<msg time="2024-12-18T21:05:17.354150" level="FAIL">No keyword with name 'DBT Run Test' found.</msg>
+<arg>Target_Table_Databases</arg>
+<status status="FAIL" start="2024-12-18T21:05:17.354150" elapsed="0.000000">No keyword with name 'DBT Run Test' found.</status>
+</kw>
+<doc>This will test the running of the target table databases model</doc>
+<status status="FAIL" start="2024-12-18T21:05:16.719326" elapsed="0.635357">No keyword with name 'DBT Run Test' found.</status>
+</test>
+<test id="s1-t8" name="Check that the tables are populates" line="66">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:17.371210" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T21:05:17.371210" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T21:05:17.371210" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T21:05:17.939958" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T21:05:17.370197" elapsed="0.571884"/>
+</kw>
+<status status="PASS" start="2024-12-18T21:05:17.368683" elapsed="0.573607"/>
+</kw>
+<kw name="Query" owner="DatabaseLibrary">
+<msg time="2024-12-18T21:05:17.943360" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;select count(*) from CS01_TARGET.BKEY_DATABASES&lt;/code&gt;</msg>
+<msg time="2024-12-18T21:05:18.037436" level="INFO" html="true">&lt;div style="max-width: 100%; overflow-x: auto;"&gt;&lt;table style="width: auto; border-collapse: collapse; border: 2px solid rgb(140 140 140)"&gt;&lt;caption style="text-align: left; font-weight: bold; padding: 5px;"&gt;Query returned 1 rows&lt;/caption&gt;&lt;tr&gt;&lt;th scope="col" style="background-color: #d6ecd4; border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;Row&lt;/th&gt;&lt;th scope="col" style="background-color: #505050; color: #fff;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;Count(*)&lt;/th&gt;&lt;/tr&gt;&lt;tr style="background-color: #eee;"&gt;&lt;th scope="row" style="background-color: #d6ecd4;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;0&lt;/th&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</msg>
+<msg time="2024-12-18T21:05:18.094431" level="INFO">${Row_Count} = [[0]]</msg>
+<var>${Row_Count}</var>
+<arg>select count(*) from CS01_TARGET.BKEY_DATABASES</arg>
+<doc>Runs a query with the ``select_statement`` and returns the result as list of rows.
+The type of row values depends on the database module -
+usually they are tuples or tuple-like objects.</doc>
+<status status="PASS" start="2024-12-18T21:05:17.942802" elapsed="0.151629"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<msg time="2024-12-18T21:05:18.096293" level="FAIL">'0 &gt; 0' should be true.</msg>
+<arg>${Row_Count[0][0]} &gt; 0</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="FAIL" start="2024-12-18T21:05:18.095101" elapsed="0.001767">'0 &gt; 0' should be true.</status>
+</kw>
+<kw name="Query" owner="DatabaseLibrary">
+<var>${Row_Count}</var>
+<arg>select count(*) from CS01_TARGET.full_apply_database</arg>
+<doc>Runs a query with the ``select_statement`` and returns the result as list of rows.
+The type of row values depends on the database module -
+usually they are tuples or tuple-like objects.</doc>
+<status status="NOT RUN" start="2024-12-18T21:05:18.097384" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${Row_Count[0][0]} &gt; 0</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2024-12-18T21:05:18.098455" elapsed="0.000000"/>
+</kw>
+<doc>This will check that the tables are populated</doc>
+<status status="FAIL" start="2024-12-18T21:05:17.355901" elapsed="0.743129">'0 &gt; 0' should be true.</status>
+</test>
+<doc>This .robot file is a suite
+
+Keywords are imported from the resource file</doc>
+<status status="FAIL" start="2024-12-18T21:05:09.066652" elapsed="9.034406"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="6" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="6" skip="0" id="s1" name="Dbt Test1">Dbt Test1</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2024-12-18T21:05:09.128970" level="ERROR">Error in file 'C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt_clearscape\robot\dbt_prototype\dbt_test1.robot' on line 10: Resource file 'C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt_clearscape\robot\resourcesdbt_core.resource' does not exist.</msg>
+<msg time="2024-12-18T21:05:13.277253" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T21:05:13.868785" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T21:05:14.556467" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T21:05:15.503695" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T21:05:16.128593" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T21:05:16.711235" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T21:05:17.349228" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T21:05:17.939958" level="WARN">Overwriting not closed connection.</msg>
+</errors>
+</robot>

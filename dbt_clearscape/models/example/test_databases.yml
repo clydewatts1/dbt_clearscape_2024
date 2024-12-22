@@ -4,3 +4,4 @@ models:
     
     config:
         materialized: 'target_view_merge'
+        table_list: ['test_databases']

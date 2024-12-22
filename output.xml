@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.1.1 (Python 3.12.8 on win32)" generated="2024-12-18T22:00:41.669749" rpa="false" schemaversion="5">
+<suite id="s1" name="Dbt Test1" source="c:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt_clearscape\robot\dbt_prototype\dbt_test1.robot">
+<test id="s1-t1" name="Test DBT Version" line="34">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:00:42.065180" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T22:00:42.095727" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T22:00:42.334665" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T22:00:42.065180" elapsed="4.359559"/>
+</kw>
+<status status="PASS" start="2024-12-18T22:00:42.064179" elapsed="4.361114"/>
+</kw>
+<kw name="DBT Version Test" owner="dbt_core">
+<kw name="Run Process" owner="Process">
+<msg time="2024-12-18T22:00:46.431431" level="INFO">Starting process:
+"C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt-env\Scripts\dbt.exe" --version</msg>
+<msg time="2024-12-18T22:00:46.469448" level="INFO">Waiting for process to complete.</msg>
+<msg time="2024-12-18T22:01:06.852168" level="INFO">Process completed.</msg>
+<msg time="2024-12-18T22:01:06.852168" level="INFO">${dbt_version} = &lt;result object with rc 0&gt;</msg>
+<var>${dbt_version}</var>
+<arg>${DBT_EXEC}</arg>
+<arg>--version</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2024-12-18T22:00:46.430920" elapsed="20.421248"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:06.853210" level="INFO">Core:
+  - installed: 1.9.0
+  - latest:    1.9.1 - Update available!
+
+  Your version of dbt-core is out of date!
+  You can find instructions for upgrading here:
+  https://docs.getdbt.com/docs/installation
+
+Plugins:
+  - teradata: 1.8.2 - Not compatible!
+
+  At least one plugin is out of date or incompatible with dbt-core.
+  You can find instructions for upgrading here:
+  https://docs.getdbt.com/docs/installation
+
+</msg>
+<arg>${dbt_version.stdout}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:06.853210" elapsed="0.000000"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:06.854206" level="INFO">C:Userscw171001.dbtprofiles.yml</msg>
+<arg>${DBT_PROFILE}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:06.853210" elapsed="0.000996"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${dbt_version.stdout}</arg>
+<arg>${expected_version}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2024-12-18T22:01:06.854206" elapsed="0.000000"/>
+</kw>
+<arg>1.9.0</arg>
+<doc>Tests if the DBT version is correct</doc>
+<status status="PASS" start="2024-12-18T22:00:46.429542" elapsed="20.424664"/>
+</kw>
+<doc>Tests if the DBT version is correct</doc>
+<status status="PASS" start="2024-12-18T22:00:42.062172" elapsed="24.793040"/>
+</test>
+<test id="s1-t2" name="Test Teradata Connection" line="38">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:06.860831" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T22:01:06.860831" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T22:01:06.860831" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T22:01:07.510998" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T22:01:06.859866" elapsed="0.658228"/>
+</kw>
+<status status="PASS" start="2024-12-18T22:01:06.859866" elapsed="0.658742"/>
+</kw>
+<kw name="Connect To My Teradata DB">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:07.523000" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T22:01:07.524515" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T22:01:07.524515" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T22:01:08.093109" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T22:01:07.522512" elapsed="0.572492"/>
+</kw>
+<status status="PASS" start="2024-12-18T22:01:07.522003" elapsed="0.573509"/>
+</kw>
+<kw name="Get DBT Info">
+<kw name="Query" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:08.099280" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;select * from dbc.dbcinfo&lt;/code&gt;</msg>
+<msg time="2024-12-18T22:01:08.151542" level="INFO" html="true">&lt;div style="max-width: 100%; overflow-x: auto;"&gt;&lt;table style="width: auto; border-collapse: collapse; border: 2px solid rgb(140 140 140)"&gt;&lt;caption style="text-align: left; font-weight: bold; padding: 5px;"&gt;Query returned 3 rows&lt;/caption&gt;&lt;tr&gt;&lt;th scope="col" style="background-color: #d6ecd4; border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;Row&lt;/th&gt;&lt;th scope="col" style="background-color: #505050; color: #fff;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;InfoKey&lt;/th&gt;&lt;th scope="col" style="background-color: #505050; color: #fff;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;InfoData&lt;/th&gt;&lt;/tr&gt;&lt;tr style="background-color: #eee;"&gt;&lt;th scope="row" style="background-color: #d6ecd4;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;0&lt;/th&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;VERSION&lt;/td&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;17.20.03.26&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope="row" style="background-color: #d6ecd4;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;1&lt;/th&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;LANGUAGE SUPPORT MODE&lt;/td&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;Standard&lt;/td&gt;&lt;/tr&gt;&lt;tr style="background-color: #eee;"&gt;&lt;th scope="row" style="background-color: #d6ecd4;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;2&lt;/th&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;RELEASE&lt;/td&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;17.20.03.26&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</msg>
+<msg time="2024-12-18T22:01:08.232397" level="INFO">${Rows} = [['VERSION', '17.20.03.26'], ['LANGUAGE SUPPORT MODE', 'Standard'], ['RELEASE', '17.20.03.26']]</msg>
+<var>${Rows}</var>
+<arg>select * from dbc.dbcinfo</arg>
+<doc>Runs a query with the ``select_statement`` and returns the result as list of rows.
+The type of row values depends on the database module -
+usually they are tuples or tuple-like objects.</doc>
+<status status="PASS" start="2024-12-18T22:01:08.098758" elapsed="0.133639"/>
+</kw>
+<doc>This will get the DBT info</doc>
+<status status="PASS" start="2024-12-18T22:01:08.098250" elapsed="0.134147"/>
+</kw>
+<doc>Tests if the Teradata connection is successful</doc>
+<status status="PASS" start="2024-12-18T22:01:06.858236" elapsed="1.383337"/>
+</test>
+<test id="s1-t3" name="Prepare Tables for Testing" line="43">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:08.244932" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T22:01:08.244932" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T22:01:08.245939" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T22:01:08.820894" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T22:01:08.244932" elapsed="0.579091"/>
+</kw>
+<status status="PASS" start="2024-12-18T22:01:08.244426" elapsed="0.580106"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:08.827640" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;DELETE FROM CS01_TARGET.BKEY_DATABASES&lt;/code&gt;</msg>
+<arg>DELETE FROM CS01_TARGET.BKEY_DATABASES</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2024-12-18T22:01:08.827067" elapsed="0.183893"/>
+</kw>
+<kw name="Execute Sql String" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:09.013456" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;DELETE FROM CS01_TARGET.full_apply_database&lt;/code&gt;</msg>
+<arg>DELETE FROM CS01_TARGET.full_apply_database</arg>
+<doc>Executes the ``sql_string`` as a single SQL command.</doc>
+<status status="PASS" start="2024-12-18T22:01:09.012890" elapsed="0.217087"/>
+</kw>
+<doc>This will delete the target Tables</doc>
+<status status="PASS" start="2024-12-18T22:01:08.243639" elapsed="0.991731"/>
+</test>
+<test id="s1-t4" name="Run Model BKEY_01_03_01" line="49">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:09.241471" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T22:01:09.242482" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T22:01:09.243480" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T22:01:09.757332" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T22:01:09.241471" elapsed="0.519104"/>
+</kw>
+<status status="PASS" start="2024-12-18T22:01:09.240963" elapsed="0.519612"/>
+</kw>
+<kw name="DBT Run" owner="dbt_core">
+<kw name="Run Process" owner="Process">
+<msg time="2024-12-18T22:01:09.764689" level="INFO">Starting process:
+"C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt-env\Scripts\dbt.exe" run --log-level info --select BKEY_01_03_01</msg>
+<msg time="2024-12-18T22:01:09.782422" level="INFO">Waiting for process to complete.</msg>
+<msg time="2024-12-18T22:01:13.000981" level="INFO">Process completed.</msg>
+<msg time="2024-12-18T22:01:13.000981" level="INFO">${dbt_run} = &lt;result object with rc 2&gt;</msg>
+<var>${dbt_run}</var>
+<arg>${DBT_EXEC}</arg>
+<arg>run</arg>
+<arg>--log-level</arg>
+<arg>${DBT_LOG_LEVEL}</arg>
+<arg>--select</arg>
+<arg>${selected_project}</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2024-12-18T22:01:09.764133" elapsed="3.236848"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:13.002019" level="INFO">22:01:12  Running with dbt=1.9.0
+22:01:12  Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  </msg>
+<arg>${dbt_run.stdout}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:13.000981" elapsed="0.001038"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:13.002019" level="INFO"/>
+<arg>${dbt_run.stderr}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:13.002019" elapsed="0.000971"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:13.002990" level="INFO">2</msg>
+<arg>${dbt_run.rc}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:13.002990" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${dbt_run.rc} &lt; 3</arg>
+<arg>msg= ${dbt_run.stderr}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2024-12-18T22:01:13.002990" elapsed="0.001000"/>
+</kw>
+<arg>BKEY_01_03_01</arg>
+<doc>Tests if the DBT run is successful</doc>
+<status status="PASS" start="2024-12-18T22:01:09.762180" elapsed="3.241810"/>
+</kw>
+<doc>This will test the running of the surrogate key model</doc>
+<status status="PASS" start="2024-12-18T22:01:09.239985" elapsed="3.764005"/>
+</test>
+<test id="s1-t5" name="Run Model Full Apply 01" line="53">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:13.009584" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T22:01:13.010535" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T22:01:13.010535" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T22:01:13.564661" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T22:01:13.008016" elapsed="0.559371"/>
+</kw>
+<status status="PASS" start="2024-12-18T22:01:13.008016" elapsed="0.559371"/>
+</kw>
+<kw name="DBT Run" owner="dbt_core">
+<kw name="Run Process" owner="Process">
+<msg time="2024-12-18T22:01:13.568817" level="INFO">Starting process:
+"C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt-env\Scripts\dbt.exe" run --log-level info --select Full_Apply_01</msg>
+<msg time="2024-12-18T22:01:13.581968" level="INFO">Waiting for process to complete.</msg>
+<msg time="2024-12-18T22:01:16.607087" level="INFO">Process completed.</msg>
+<msg time="2024-12-18T22:01:16.608097" level="INFO">${dbt_run} = &lt;result object with rc 2&gt;</msg>
+<var>${dbt_run}</var>
+<arg>${DBT_EXEC}</arg>
+<arg>run</arg>
+<arg>--log-level</arg>
+<arg>${DBT_LOG_LEVEL}</arg>
+<arg>--select</arg>
+<arg>${selected_project}</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2024-12-18T22:01:13.568817" elapsed="3.039280"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:16.608097" level="INFO">22:01:16  Running with dbt=1.9.0
+22:01:16  Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  </msg>
+<arg>${dbt_run.stdout}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:16.608097" elapsed="0.001001"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:16.609608" level="INFO"/>
+<arg>${dbt_run.stderr}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:16.609098" elapsed="0.000510"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:16.609608" level="INFO">2</msg>
+<arg>${dbt_run.rc}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:16.609608" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${dbt_run.rc} &lt; 3</arg>
+<arg>msg= ${dbt_run.stderr}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2024-12-18T22:01:16.609608" elapsed="0.001007"/>
+</kw>
+<arg>Full_Apply_01</arg>
+<doc>Tests if the DBT run is successful</doc>
+<status status="PASS" start="2024-12-18T22:01:13.568304" elapsed="3.042311"/>
+</kw>
+<doc>This will test the running of the full apply model No 1</doc>
+<status status="PASS" start="2024-12-18T22:01:13.006990" elapsed="3.604631"/>
+</test>
+<test id="s1-t6" name="Run Model Full Apply 02" line="57">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:16.615632" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T22:01:16.616626" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T22:01:16.616626" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T22:01:17.190728" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T22:01:16.614625" elapsed="0.634521"/>
+</kw>
+<status status="PASS" start="2024-12-18T22:01:16.614625" elapsed="0.635030"/>
+</kw>
+<kw name="DBT Run" owner="dbt_core">
+<kw name="Run Process" owner="Process">
+<msg time="2024-12-18T22:01:17.252677" level="INFO">Starting process:
+"C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt-env\Scripts\dbt.exe" run --log-level info --select Full_Apply_02</msg>
+<msg time="2024-12-18T22:01:17.288473" level="INFO">Waiting for process to complete.</msg>
+<msg time="2024-12-18T22:01:20.370902" level="INFO">Process completed.</msg>
+<msg time="2024-12-18T22:01:20.372061" level="INFO">${dbt_run} = &lt;result object with rc 2&gt;</msg>
+<var>${dbt_run}</var>
+<arg>${DBT_EXEC}</arg>
+<arg>run</arg>
+<arg>--log-level</arg>
+<arg>${DBT_LOG_LEVEL}</arg>
+<arg>--select</arg>
+<arg>${selected_project}</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2024-12-18T22:01:17.252677" elapsed="3.119384"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:20.373072" level="INFO">22:01:19  Running with dbt=1.9.0
+22:01:19  Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  </msg>
+<arg>${dbt_run.stdout}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:20.372061" elapsed="0.001011"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:20.374073" level="INFO"/>
+<arg>${dbt_run.stderr}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:20.373072" elapsed="0.001001"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:20.374587" level="INFO">2</msg>
+<arg>${dbt_run.rc}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:20.374073" elapsed="0.000514"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${dbt_run.rc} &lt; 3</arg>
+<arg>msg= ${dbt_run.stderr}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2024-12-18T22:01:20.374587" elapsed="0.001014"/>
+</kw>
+<arg>Full_Apply_02</arg>
+<doc>Tests if the DBT run is successful</doc>
+<status status="PASS" start="2024-12-18T22:01:17.251666" elapsed="3.123935"/>
+</kw>
+<doc>This will test the running of the full apply model No 2</doc>
+<status status="PASS" start="2024-12-18T22:01:16.613623" elapsed="3.762977"/>
+</test>
+<test id="s1-t7" name="Run Model Target Table Databases" line="61">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:20.389285" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T22:01:20.390713" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T22:01:20.391974" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T22:01:20.976324" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T22:01:20.388275" elapsed="0.589640"/>
+</kw>
+<status status="PASS" start="2024-12-18T22:01:20.386949" elapsed="0.590966"/>
+</kw>
+<kw name="DBT Run" owner="dbt_core">
+<kw name="Run Process" owner="Process">
+<msg time="2024-12-18T22:01:20.982654" level="INFO">Starting process:
+"C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt-env\Scripts\dbt.exe" run --log-level info --select Target_Table_Databases</msg>
+<msg time="2024-12-18T22:01:21.010233" level="INFO">Waiting for process to complete.</msg>
+<msg time="2024-12-18T22:01:23.855522" level="INFO">Process completed.</msg>
+<msg time="2024-12-18T22:01:23.855522" level="INFO">${dbt_run} = &lt;result object with rc 2&gt;</msg>
+<var>${dbt_run}</var>
+<arg>${DBT_EXEC}</arg>
+<arg>run</arg>
+<arg>--log-level</arg>
+<arg>${DBT_LOG_LEVEL}</arg>
+<arg>--select</arg>
+<arg>${selected_project}</arg>
+<doc>Runs a process and waits for it to complete.</doc>
+<status status="PASS" start="2024-12-18T22:01:20.982516" elapsed="2.874001"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:23.856517" level="INFO">22:01:23  Running with dbt=1.9.0
+22:01:23  Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\cw171001\OneDrive - Teradata\Documents\dbt_clearscape\dbt_clearscape\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  </msg>
+<arg>${dbt_run.stdout}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:23.856517" elapsed="0.000000"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:23.857514" level="INFO"/>
+<arg>${dbt_run.stderr}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:23.857514" elapsed="0.000000"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2024-12-18T22:01:23.858516" level="INFO">2</msg>
+<arg>${dbt_run.rc}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2024-12-18T22:01:23.857514" elapsed="0.001002"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${dbt_run.rc} &lt; 3</arg>
+<arg>msg= ${dbt_run.stderr}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2024-12-18T22:01:23.858516" elapsed="0.000992"/>
+</kw>
+<arg>Target_Table_Databases</arg>
+<doc>Tests if the DBT run is successful</doc>
+<status status="PASS" start="2024-12-18T22:01:20.981369" elapsed="2.878139"/>
+</kw>
+<doc>This will test the running of the target table databases model</doc>
+<status status="PASS" start="2024-12-18T22:01:20.385596" elapsed="3.474477"/>
+</test>
+<test id="s1-t8" name="Check that the tables are populates" line="66">
+<kw name="Connect To My Teradata DB" type="SETUP">
+<kw name="Connect To Database" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:23.876381" level="INFO">Looking for configuration file: 'resources\db.cfg'</msg>
+<msg time="2024-12-18T22:01:23.876381" level="INFO">Configuration file doesn't exist</msg>
+<msg time="2024-12-18T22:01:23.877380" level="INFO">Connect to DB using : teradatasql.connect(database='dbc', user='demo_user', password=***, host='dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com')</msg>
+<msg time="2024-12-18T22:01:24.552762" level="WARN">Overwriting not closed connection.</msg>
+<arg>teradatasql</arg>
+<arg>db_name=dbc</arg>
+<arg>db_user=demo_user</arg>
+<arg>db_password=Achill853</arg>
+<arg>db_host=dbtclearscape-vjpiuc437tcyfda4.env.clearscape.teradata.com</arg>
+<doc>Creates a database connection using the DB API 2.0 ``db_module`` and the parameters provided.
+Along with listed commonly used arguments (`db_name`, `db_host` etc.)
+you can set any other DB module specific parameters as key/value pairs.</doc>
+<status status="PASS" start="2024-12-18T22:01:23.875387" elapsed="0.678297"/>
+</kw>
+<status status="PASS" start="2024-12-18T22:01:23.875387" elapsed="0.678984"/>
+</kw>
+<kw name="Query" owner="DatabaseLibrary">
+<msg time="2024-12-18T22:01:24.555046" level="INFO" html="true">Executing sql:&lt;br&gt;&lt;code style="font-weight: bold;"&gt;select count(*) from CS01_TARGET.BKEY_DATABASES&lt;/code&gt;</msg>
+<msg time="2024-12-18T22:01:24.646621" level="INFO" html="true">&lt;div style="max-width: 100%; overflow-x: auto;"&gt;&lt;table style="width: auto; border-collapse: collapse; border: 2px solid rgb(140 140 140)"&gt;&lt;caption style="text-align: left; font-weight: bold; padding: 5px;"&gt;Query returned 1 rows&lt;/caption&gt;&lt;tr&gt;&lt;th scope="col" style="background-color: #d6ecd4; border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;Row&lt;/th&gt;&lt;th scope="col" style="background-color: #505050; color: #fff;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;Count(*)&lt;/th&gt;&lt;/tr&gt;&lt;tr style="background-color: #eee;"&gt;&lt;th scope="row" style="background-color: #d6ecd4;border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;0&lt;/th&gt;&lt;td style="border: 1px solid rgb(160 160 160);padding: 8px 10px;text-align: center;"&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</msg>
+<msg time="2024-12-18T22:01:24.709313" level="INFO">${Row_Count} = [[0]]</msg>
+<var>${Row_Count}</var>
+<arg>select count(*) from CS01_TARGET.BKEY_DATABASES</arg>
+<doc>Runs a query with the ``select_statement`` and returns the result as list of rows.
+The type of row values depends on the database module -
+usually they are tuples or tuple-like objects.</doc>
+<status status="PASS" start="2024-12-18T22:01:24.555046" elapsed="0.154629"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<msg time="2024-12-18T22:01:24.711379" level="FAIL">'0 &gt; 0' should be true.</msg>
+<arg>${Row_Count[0][0]} &gt; 0</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="FAIL" start="2024-12-18T22:01:24.710338" elapsed="0.005511">'0 &gt; 0' should be true.</status>
+</kw>
+<kw name="Query" owner="DatabaseLibrary">
+<var>${Row_Count}</var>
+<arg>select count(*) from CS01_TARGET.full_apply_database</arg>
+<doc>Runs a query with the ``select_statement`` and returns the result as list of rows.
+The type of row values depends on the database module -
+usually they are tuples or tuple-like objects.</doc>
+<status status="NOT RUN" start="2024-12-18T22:01:24.717050" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${Row_Count[0][0]} &gt; 0</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2024-12-18T22:01:24.717657" elapsed="0.000000"/>
+</kw>
+<doc>This will check that the tables are populated</doc>
+<status status="FAIL" start="2024-12-18T22:01:23.874413" elapsed="0.844121">'0 &gt; 0' should be true.</status>
+</test>
+<doc>This .robot file is a suite
+
+Keywords are imported from the resource file</doc>
+<status status="FAIL" start="2024-12-18T22:00:41.740227" elapsed="42.987291"/>
+</suite>
+<statistics>
+<total>
+<stat pass="7" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="7" fail="1" skip="0" id="s1" name="Dbt Test1">Dbt Test1</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2024-12-18T22:01:07.510998" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T22:01:08.093109" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T22:01:08.820894" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T22:01:09.757332" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T22:01:13.564661" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T22:01:17.190728" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T22:01:20.976324" level="WARN">Overwriting not closed connection.</msg>
+<msg time="2024-12-18T22:01:24.552762" level="WARN">Overwriting not closed connection.</msg>
+</errors>
+</robot>

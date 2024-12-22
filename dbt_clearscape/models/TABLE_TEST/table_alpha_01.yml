@@ -1,0 +1,13 @@
+models:
+  - name: table_alpha_01
+    description: This will test alpha test
+    config:
+        materialized: 'table_alpha'
+        schema: 'TARGET'
+    columns:
+      - name: databasename
+        description: The name of the database
+        data_type: VARCHAR(255)
+
+        constraints:
+          - type: not_null
