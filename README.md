@@ -15,6 +15,15 @@ Currently this is in early ALPHA Phase , it is a proof in concept can teradata c
 
 - Antiselect
 
+## Note:
+
+This repository is going to be sunsetted and split into multiple repositories
+
+dbt_clearscape - purely for DBT and clearscape
+dbt_robot_code,cloud - robot framework for testing dbt
+td_robot - robot framework for testing teradata stuff
+dbt_xxxx - not decided yet - this will be dbt full apply etc. materisations
+
 
 
 
